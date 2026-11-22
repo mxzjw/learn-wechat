@@ -221,3 +221,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# 微信小程序
+project.private.config.json
+miniprogram_npm/

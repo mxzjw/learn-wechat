@@ -1,0 +1,108 @@
+<view class="page">
+    <view class="profile-card">
+        <view class="avatar-wrap" bindtap="onChooseAvatar">
+            <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}" mode="aspectFill"></image>
+            <text wx:else class="avatar-emoji">{{emoji}}</text>
+            <view class="avatar-edit">更换</view>
+        </view>
+        <text class="avatar-tip">上传头像，或从下方选择一个表情</text>
+        <view class="emoji-row">
+            <view
+                class="emoji-item {{item === emoji ? 'emoji-active' : ''}}"
+                wx:for="{{emojiOptions}}"
+                wx:key="*this"
+                data-emoji="{{item}}"
+                bindtap="onPickEmoji"
+            >{{item}}</view>
+        </view>
+    </view>
+
+    <view class="card">
+        <view class="field">
+            <text class="field-label">名字</text>
+            <input
+                class="field-input"
+                value="{{name}}"
+                placeholder="例如：奶油"
+                placeholder-class="field-placeholder"
+                maxlength="12"
+                bindinput="onNameInput"
+            />
+        </view>
+
+        <view class="field">
+            <text class="field-label">品种</text>
+            <input
+                class="field-input"
+                value="{{breed}}"
+                placeholder="例如：英短蓝白"
+                placeholder-class="field-placeholder"
+                maxlength="20"
+                bindinput="onBreedInput"
+            />
+        </view>
+
+        <view class="chips">
+            <text
+                class="chip"
+                wx:for="{{breedOptions}}"
+                wx:key="*this"
+                data-breed="{{item}}"
+                bindtap="onPickBreed"
+            >{{item}}</text>
+        </view>
+
+        <view class="field field-line">
+            <text class="field-label">生日</text>
+            <picker mode="date" value="{{birthdayPicker}}" start="2005-01-01" end="{{today}}" bindchange="onBirthdayChange">
+                <view class="picker-value {{birthday ? '' : 'picker-empty'}}">
+                    {{birthday ? birthday : '选择生日'}}
+                    <text class="picker-arrow">›</text>
+                </view>
+            </picker>
+        </view>
+        <text class="field-hint">{{ageHint}}</text>
+    </view>
+
+    <view class="card">
+        <view class="card-title">
+            <text>健康计划</text>
+            <text class="section-label">未设置可留空</text>
+        </view>
+
+        <view class="field field-line">
+            <text class="field-label">下次驱虫</text>
+            <picker mode="date" value="{{dewormPicker}}" start="{{today}}" end="2035-12-31" bindchange="onDewormChange">
+                <view class="picker-value {{dewormNext ? '' : 'picker-empty'}}">
+                    {{dewormNext ? dewormNext : '未设置'}}
+                    <text class="picker-arrow">›</text>
+                </view>
+            </picker>
+        </view>
+        <view class="chips chips-tight">
+            <text class="chip" data-type="deworm" data-months="1" bindtap="onQuickNext">+1 个月</text>
+            <text class="chip" data-type="deworm" data-months="3" bindtap="onQuickNext">+3 个月</text>
+            <text wx:if="{{dewormNext}}" class="chip chip-plain" data-type="deworm" data-months="0" bindtap="onClearNext">清除</text>
+        </view>
+
+        <view class="field field-line">
+            <text class="field-label">下次疫苗</text>
+            <picker mode="date" value="{{vaccinePicker}}" start="{{today}}" end="2035-12-31" bindchange="onVaccineChange">
+                <view class="picker-value {{vaccineNext ? '' : 'picker-empty'}}">
+                    {{vaccineNext ? vaccineNext : '未设置'}}
+                    <text class="picker-arrow">›</text>
+                </view>
+            </picker>
+        </view>
+        <view class="chips chips-tight">
+            <text class="chip" data-type="vaccine" data-months="12" bindtap="onQuickNext">+1 年</text>
+            <text class="chip" data-type="vaccine" data-months="3" bindtap="onQuickNext">+3 个月</text>
+            <text wx:if="{{vaccineNext}}" class="chip chip-plain" data-type="vaccine" data-months="0" bindtap="onClearNext">清除</text>
+        </view>
+    </view>
+
+    <view class="actions">
+        <view class="primary-btn action-main" bindtap="onSave">{{isEdit ? '保存修改' : '创建档案'}}</view>
+        <view wx:if="{{isEdit}}" class="danger-link" bindtap="onDelete">删除这只猫咪</view>
+    </view>
+</view>

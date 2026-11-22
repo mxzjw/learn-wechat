@@ -1,0 +1,130 @@
+.head-text {
+    max-width: 460rpx;
+}
+
+.reminder-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.reminder-card {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 26rpx;
+    padding: 24rpx 22rpx;
+    margin-bottom: 20rpx;
+    border-left: 8rpx solid #e8ded3;
+    box-shadow: 0 8rpx 24rpx rgba(171, 132, 96, 0.07);
+}
+
+.level-danger {
+    border-left-color: #cd4a40;
+}
+
+.level-warn {
+    border-left-color: #e8a04d;
+}
+
+.level-ok {
+    border-left-color: #6aac82;
+}
+
+.r-avatar {
+    width: 84rpx;
+    height: 84rpx;
+    border-radius: 42rpx;
+    background: #fdf1e4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.r-avatar-img {
+    width: 84rpx;
+    height: 84rpx;
+}
+
+.r-avatar-emoji {
+    font-size: 44rpx;
+    line-height: 1;
+}
+
+.r-main {
+    flex: 1;
+    margin-left: 20rpx;
+    min-width: 0;
+}
+
+.r-title-row {
+    display: flex;
+    align-items: center;
+}
+
+.r-cat {
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #2b2320;
+    max-width: 240rpx;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.r-type {
+    margin-left: 12rpx;
+    padding: 4rpx 14rpx;
+    border-radius: 16rpx;
+    background: #f8f2ea;
+    color: #8d8074;
+    font-size: 21rpx;
+}
+
+.r-date {
+    display: block;
+    margin-top: 6rpx;
+    font-size: 23rpx;
+    color: #a89c92;
+}
+
+.r-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-left: 12rpx;
+}
+
+.r-days {
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #4b3c30;
+}
+
+.level-danger .r-days {
+    color: #c2433a;
+}
+
+.level-warn .r-days {
+    color: #c1731c;
+}
+
+.level-ok .r-days {
+    color: #4b8a5f;
+}
+
+.r-tip {
+    margin-top: 4rpx;
+    font-size: 20rpx;
+    color: #b7a99b;
+}
+
+.foot-tip {
+    margin-top: 8rpx;
+    text-align: center;
+    font-size: 22rpx;
+    color: #c1b6ab;
+    padding: 0 20rpx;
+    line-height: 1.6;
+}

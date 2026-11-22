@@ -1,0 +1,170 @@
+<view class="page detail-page">
+    <view wx:if="{{!cat}}" class="hint">正在加载猫咪档案…</view>
+
+    <block wx:else>
+        <view class="hero">
+            <view class="hero-avatar">
+                <image wx:if="{{cat.avatar}}" class="hero-img" src="{{cat.avatar}}" mode="aspectFill"></image>
+                <text wx:else class="hero-emoji">{{cat.emoji}}</text>
+            </view>
+            <view class="hero-main">
+                <view class="hero-name-row">
+                    <text class="hero-name">{{cat.name}}</text>
+                    <text wx:if="{{cat.breed}}" class="hero-breed">{{cat.breed}}</text>
+                </view>
+                <text class="hero-meta">{{cat.ageText}}{{cat.birthdayText}}</text>
+            </view>
+            <view class="hero-edit" bindtap="onEdit">编辑</view>
+        </view>
+
+        <view class="stat-row">
+            <view class="stat">
+                <text class="stat-value">{{latestWeight}}</text>
+                <text class="stat-label">最新体重</text>
+            </view>
+            <view class="stat-divider"></view>
+            <view class="stat">
+                <text class="stat-value {{deltaClass}}">{{deltaText}}</text>
+                <text class="stat-label">较上次</text>
+            </view>
+            <view class="stat-divider"></view>
+            <view class="stat">
+                <text class="stat-value">{{recordCount}}</text>
+                <text class="stat-label">称重记录</text>
+            </view>
+        </view>
+
+        <view class="card">
+            <view class="card-title">
+                <text>体重趋势</text>
+                <view class="range-row">
+                    <text class="range-item {{range === 'all' ? 'range-active' : ''}}" data-range="all" bindtap="onRange">全部</text>
+                    <text class="range-item {{range === '90d' ? 'range-active' : ''}}" data-range="90d" bindtap="onRange">近3个月</text>
+                </view>
+            </view>
+
+            <view wx:if="{{chartEmpty}}" class="chart-empty">
+                <text class="chart-empty-emoji">📈</text>
+                <text class="chart-empty-text">{{recordCount ? '所选区间暂无记录' : '记录第一次体重，曲线就会出现在这里'}}</text>
+            </view>
+            <view wx:else class="chart-box">
+                <canvas type="2d" id="weightChart" class="chart-canvas"></canvas>
+                <text wx:if="{{chartFallback}}" class="chart-fallback">当前环境暂不支持图表绘制，请查看下方记录</text>
+            </view>
+        </view>
+
+        <view class="card">
+            <view class="card-title">
+                <text>健康计划</text>
+                <text class="section-label">点日期可调整</text>
+            </view>
+
+            <picker mode="date" value="{{dewormPicker}}" start="{{today}}" end="2035-12-31" bindchange="onDewormChange">
+                <view class="plan-row">
+                    <view class="plan-icon plan-deworm">虫</view>
+                    <view class="plan-main">
+                        <text class="plan-title">下次驱虫</text>
+                        <text class="plan-date">{{dewormDateText}}</text>
+                    </view>
+                    <text class="badge badge-{{dewormLevel}}">{{dewormCountdown}}</text>
+                </view>
+            </picker>
+            <view class="quick-row">
+                <text class="quick-chip" data-type="deworm" data-months="1" bindtap="onQuickNext">+1 个月</text>
+                <text class="quick-chip" data-type="deworm" data-months="3" bindtap="onQuickNext">+3 个月</text>
+                <text wx:if="{{cat.dewormNext}}" class="quick-chip quick-chip-plain" data-type="deworm" bindtap="onClearNext">清除</text>
+            </view>
+
+            <picker mode="date" value="{{vaccinePicker}}" start="{{today}}" end="2035-12-31" bindchange="onVaccineChange">
+                <view class="plan-row">
+                    <view class="plan-icon plan-vaccine">苗</view>
+                    <view class="plan-main">
+                        <text class="plan-title">下次疫苗</text>
+                        <text class="plan-date">{{vaccineDateText}}</text>
+                    </view>
+                    <text class="badge badge-{{vaccineLevel}}">{{vaccineCountdown}}</text>
+                </view>
+            </picker>
+            <view class="quick-row">
+                <text class="quick-chip" data-type="vaccine" data-months="12" bindtap="onQuickNext">+1 年</text>
+                <text class="quick-chip" data-type="vaccine" data-months="3" bindtap="onQuickNext">+3 个月</text>
+                <text wx:if="{{cat.vaccineNext}}" class="quick-chip quick-chip-plain" data-type="vaccine" bindtap="onClearNext">清除</text>
+            </view>
+        </view>
+
+        <view class="card">
+            <view class="card-title">
+                <text>称重记录</text>
+                <text class="section-label">长按可删除</text>
+            </view>
+
+            <view wx:if="{{records.length === 0}}" class="record-empty">还没有记录，点下方按钮添加第一次称重</view>
+
+            <view
+                class="record-row"
+                wx:for="{{records}}"
+                wx:key="id"
+                data-id="{{item.id}}"
+                data-date="{{item.date}}"
+                bindlongpress="onLongPressRecord"
+            >
+                <view class="record-date">
+                    <text class="record-day">{{item.dateLabel}}</text>
+                    <text class="record-week">{{item.weekLabel}}</text>
+                </view>
+                <view class="record-main">
+                    <text class="record-weight">{{item.weightText}}</text>
+                    <text wx:if="{{item.note}}" class="record-note">{{item.note}}</text>
+                </view>
+                <text wx:if="{{item.deltaText}}" class="record-delta {{item.deltaClass}}">{{item.deltaText}}</text>
+            </view>
+        </view>
+
+        <view class="bottom-holder"></view>
+        <view class="bottom-bar">
+            <view class="primary-btn record-btn" bindtap="onOpenSheet">＋ 记录体重</view>
+        </view>
+    </block>
+</view>
+
+<view wx:if="{{showSheet}}" class="mask" bindtap="onCloseSheet"></view>
+<view wx:if="{{showSheet}}" class="sheet">
+    <view class="sheet-head">
+        <text class="sheet-title">记录体重</text>
+        <text class="sheet-close" bindtap="onCloseSheet">关闭</text>
+    </view>
+
+    <view class="weight-input-row">
+        <input
+            class="weight-input"
+            type="digit"
+            value="{{form.weight}}"
+            placeholder="0.0"
+            placeholder-class="weight-placeholder"
+            focus="{{showSheet}}"
+            bindinput="onWeightInput"
+        />
+        <text class="weight-unit">kg</text>
+    </view>
+
+    <picker mode="date" value="{{form.date}}" start="2010-01-01" end="{{today}}" bindchange="onDateChange">
+        <view class="sheet-field">
+            <text class="sheet-field-label">称重日期</text>
+            <text class="sheet-field-value">{{form.date}}</text>
+        </view>
+    </picker>
+
+    <view class="sheet-field">
+        <text class="sheet-field-label">备注</text>
+        <input
+            class="sheet-note-input"
+            value="{{form.note}}"
+            placeholder="选填，例如：饭后称重"
+            placeholder-class="weight-placeholder"
+            maxlength="30"
+            bindinput="onNoteInput"
+        />
+    </view>
+
+    <view class="primary-btn sheet-save" bindtap="onSubmit">保存记录</view>
+</view>
